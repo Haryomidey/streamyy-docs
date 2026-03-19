@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 import { motion } from 'motion/react';
 import { DOCS } from '../docs';
 import { CodeBlock } from '../components/CodeBlock';
-import { ChevronLeft, ChevronRight, Clock, User } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export function DocPage() {
@@ -27,18 +27,7 @@ export function DocPage() {
       transition={{ duration: 0.3, ease: 'easeOut' }}
       className="max-w-3xl"
     >
-      {/* Meta Info */}
-      <div className="flex items-center gap-6 mb-8 text-xs font-bold text-zinc-400 uppercase tracking-[0.15em]">
-        <div className="flex items-center gap-2">
-          <Clock className="w-3.5 h-3.5" />
-          <span>Updated 2 days ago</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <User className="w-3.5 h-3.5" />
-          <span>Streamyy Core Team</span>
-        </div>
-      </div>
-
+     
       {/* Content */}
       <div className="markdown-body prose prose-zinc max-w-none">
         <ReactMarkdown

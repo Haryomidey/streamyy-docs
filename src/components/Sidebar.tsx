@@ -11,7 +11,9 @@ import {
   Monitor, 
   GitBranch,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Radio,
+  TerminalSquare
 } from 'lucide-react';
 import { DOCS } from '../docs';
 
@@ -30,7 +32,9 @@ const getIcon = (id: string) => {
     case 'frameworks': return <GitBranch className="w-4 h-4" />;
     case 'http-api': return <ExternalLink className="w-4 h-4" />;
     case 'frontend-usage': return <Monitor className="w-4 h-4" />;
+    case 'signaling-events': return <Radio className="w-4 h-4" />;
     case 'flow': return <ChevronRight className="w-4 h-4" />;
+    case 'workspace-commands': return <TerminalSquare className="w-4 h-4" />;
     default: return <ChevronRight className="w-4 h-4" />;
   }
 };
@@ -51,7 +55,7 @@ export function Sidebar({ isOpen, onClose, searchQuery }: SidebarProps) {
 
   return (
     <aside className={cn(
-      "fixed inset-y-0 left-0 z-40 w-72 border-r border-zinc-200 bg-white/80 backdrop-blur-xl transition-all duration-300 lg:relative lg:translate-x-0",
+      "fixed inset-y-0 left-0 z-40 w-72 border-r border-zinc-200 bg-white/80 backdrop-blur-xl transition-all duration-300 lg:static lg:h-screen lg:shrink-0 lg:self-start lg:translate-x-0",
       isOpen ? "translate-x-0" : "-translate-x-full"
     )}>
       <div className="h-full overflow-y-auto px-6 py-8">
@@ -88,16 +92,16 @@ export function Sidebar({ isOpen, onClose, searchQuery }: SidebarProps) {
         <div className="pt-8 border-t border-zinc-100 px-2">
           <h4 className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em] mb-4">Resources</h4>
           <div className="space-y-1">
-            <a href="#" className="flex items-center justify-between px-3 py-2.5 text-sm text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-all group">
-              Changelog 
+            <a href="https://github.com/Haryomidey/streamyy" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-3 py-2.5 text-sm text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-all group">
+              Repository
               <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
-            <a href="#" className="flex items-center justify-between px-3 py-2.5 text-sm text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-all group">
-              Community 
+            <a href="https://github.com/Haryomidey/streamyy/blob/main/README.md" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-3 py-2.5 text-sm text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-all group">
+              README
               <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
-            <a href="#" className="flex items-center justify-between px-3 py-2.5 text-sm text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-all group">
-              Support 
+            <a href="https://github.com/Haryomidey/streamyy/issues" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between px-3 py-2.5 text-sm text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 rounded-xl transition-all group">
+              Issues
               <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
             </a>
           </div>
