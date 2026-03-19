@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-zinc-50 text-zinc-900 font-sans antialiased;
+  }
+
+  .markdown-body h1 {
+    @apply text-5xl font-bold mb-8 tracking-tight text-zinc-900;
+  }
+
+  .markdown-body h2 {
+    @apply text-3xl font-bold mt-16 mb-6 tracking-tight text-zinc-900 border-b border-zinc-100 pb-4;
+  }
+
+  .markdown-body h3 {
+    @apply text-xl font-bold mt-10 mb-4 text-zinc-800 tracking-tight;
+  }
+
+  .markdown-body p {
+    @apply mb-6 leading-8 text-zinc-600 text-[17px];
+  }
+
+  .markdown-body ul {
+    @apply list-none mb-8 space-y-3 text-zinc-600 text-[17px];
+  }
+
+  .markdown-body ul li {
+    @apply relative pl-7;
+  }
+
+  .markdown-body ul li::before {
+    content: "";
+    @apply absolute left-0 top-[0.6em] w-1.5 h-1.5 rounded-full bg-zinc-300;
+  }
+
+  .markdown-body code:not(pre code) {
+    @apply font-mono bg-zinc-100 px-1.5 py-0.5 rounded-md text-[0.9em] text-zinc-800 border border-zinc-200;
+  }
+
+  .markdown-body blockquote {
+    @apply border-l-4 border-zinc-900 pl-6 italic text-zinc-700 mb-8 bg-zinc-100/50 py-4 rounded-r-xl;
+  }
+
+  .markdown-body strong {
+    @apply font-bold text-zinc-900;
+  }
+
+  .markdown-body a {
+    @apply text-zinc-900 underline underline-offset-4 decoration-zinc-300 hover:decoration-zinc-900 transition-all font-medium;
+  }
+}
