@@ -7,10 +7,8 @@ export default function App() {
     <Router>
       <MainLayout>
         <Routes>
-          {/* Home redirects to introduction */}
           <Route path="/" element={<DocPage />} />
           <Route path="/:docId" element={<DocPage />} />
-          {/* Fallback */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </MainLayout>

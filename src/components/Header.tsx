@@ -21,12 +21,8 @@ export function Header({ isSidebarOpen, onToggleSidebar, searchQuery, onSearchCh
           </button>
           
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-9 h-9 bg-zinc-900 rounded-xl flex items-center justify-center shadow-lg shadow-zinc-200/50 group-hover:scale-105 transition-transform duration-200">
-              <span className="text-white font-bold text-sm tracking-tighter">SY</span>
-            </div>
             <div className="flex flex-col -space-y-1">
               <span className="font-bold text-lg tracking-tight text-zinc-900">Streamyy</span>
-              <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-[0.2em]">Infrastructure</span>
             </div>
           </Link>
         </div>
