@@ -1,102 +1,76 @@
-# Streamyy
+# Streamyy Docs
 
-Streamyy is a package-based calling infrastructure for 1-to-1 audio and video calls.
+This repository contains the documentation site for **Streamyy**, a package-based calling infrastructure for 1-to-1 audio and video calls.
 
-This repository is the source for the publishable packages.
+The docs explain how Streamyy is split across backend and frontend packages, how signaling works, how persistence is plugged in, and how teams can ship either a ready-made calling UI or a fully custom experience.
 
-The intended usage is simple:
+## What Streamyy Does
 
-- frontend developers install the frontend package
-- backend developers install the backend package
-- both sides communicate through the same signaling events and call lifecycle
+Streamyy gives product teams the application-layer pieces required to build calling features:
 
-Important:
+- signaling for call setup and teardown
+- call lifecycle state management
+- presence and connection tracking
+- optional HTTP helper routes
+- frontend helpers for React and WebRTC-driven flows
+- persistence adapters so state is not tied to one database
 
-- Streamyy handles signaling, call state, presence, and socket orchestration
-- Streamyy does not process audio or video media on the server
-- media still flows peer-to-peer through WebRTC
-- persistence is adapter-based, so storage is not tied to MongoDB
+Streamyy does **not** process audio or video on the server. Media still flows peer-to-peer through WebRTC.
 
-## Packages
+## What This Repository Contains
+
+This repo is the docs app, not the package workspace itself.
+
+It includes:
+
+- a Vite + React + TypeScript documentation frontend
+- markdown-like documentation content stored in [`src/docs.ts`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/src/docs.ts)
+- a landing and section-based docs layout
+- Vercel routing config in [`vercel.json`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/vercel.json)
+
+## Streamyy Package Map
 
 ### `@streamyy/core`
 
-Shared internal/backend package for:
+Shared contracts and backend-facing primitives:
 
 - call session types
 - call statuses
-- repositories
-- persistence adapters
+- repository interfaces
+- persistence adapter helpers
 - service lifecycle logic
 
-### `@streamyy/mongoose`
+### `@streamyy/server`
 
-Optional MongoDB/Mongoose adapter package for:
+The backend package for application servers.
 
-- Mongoose models
-- Mongoose repositories
-- `createMongoosePersistenceAdapter(...)`
+Use it when you want:
 
-### `@streamyy/prisma`
+- Socket.IO signaling transport
+- runtime bootstrap
+- Express integration
+- Fastify integration
+- Nest-style module registration
+- default ringing timeout behavior
+- persistence-agnostic backend setup
 
-Optional Prisma adapter package for:
+### `@streamyy/client`
 
-- Prisma-backed repositories
-- `createPrismaPersistenceAdapter(...)`
+The frontend package for web clients.
 
-### `@streamyy/postgres`
+Use it when you want:
 
-Optional PostgreSQL adapter package for:
+- a signaling client
+- React provider and hooks
+- a default install-ready calling widget
+- ringtone support
+- reconnect-aware client state
+- WebRTC helper utilities
+- reusable video layout components
 
-- SQL-backed repositories
-- `createPostgresPersistenceAdapter(...)`
+### Official Adapter Packages
 
-### `@streamyy/redis`
-
-Optional Redis adapter package for:
-
-- lightweight ephemeral state
-- fast presence and connection tracking
-- `createRedisPersistenceAdapter(...)`
-
-### `@streamyy/supabase`
-
-Optional Supabase adapter package for:
-
-- Supabase table-backed repositories
-- `createSupabasePersistenceAdapter(...)`
-
-### `@streamyy/dynamodb`
-
-Optional DynamoDB adapter package for:
-
-- DynamoDB-backed repositories
-- `createDynamoDbPersistenceAdapter(...)`
-
-## Supported Persistence Modes
-
-Right now Streamyy supports:
-
-- in-memory storage out of the box
-- MongoDB through `@streamyy/mongoose`
-- Prisma through `@streamyy/prisma`
-- PostgreSQL through `@streamyy/postgres`
-- Redis through `@streamyy/redis`
-- Supabase through `@streamyy/supabase`
-- DynamoDB through `@streamyy/dynamodb`
-- custom adapters through the repository interfaces in `@streamyy/core`
-
-That means you can support:
-
-- Prisma
-- PostgreSQL
-- MySQL
-- Redis
-- Supabase
-- DynamoDB
-- your own custom persistence layer
-
-Official adapter packages in this workspace:
+Streamyy supports first-party persistence adapters for:
 
 - `@streamyy/mongoose`
 - `@streamyy/prisma`
@@ -105,38 +79,31 @@ Official adapter packages in this workspace:
 - `@streamyy/supabase`
 - `@streamyy/dynamodb`
 
-Each adapter package now includes its own README and, where relevant, ready-to-copy schema examples.
+## Persistence Model
 
-### `@streamyy/server`
+Streamyy is intentionally storage-agnostic. The backend runtime uses repository contracts rather than hardcoding a database.
 
-Backend package developers install.
+Supported approaches:
 
-Use it when you want:
+- in-memory storage out of the box
+- MongoDB through `@streamyy/mongoose`
+- Prisma through `@streamyy/prisma`
+- PostgreSQL through `@streamyy/postgres`
+- Redis through `@streamyy/redis`
+- Supabase through `@streamyy/supabase`
+- DynamoDB through `@streamyy/dynamodb`
+- any custom adapter that implements the `@streamyy/core` repository interfaces
 
-- Socket.IO signaling transport
-- runtime bootstrap
-- Express integration
-- Fastify integration
-- Nest-style module integration
-- 60-second ringing timeout by default
-- persistence-agnostic backend setup
+This makes it easier to:
 
-### `@streamyy/client`
-
-Frontend package developers install.
-
-Use it when you want:
-
-- signaling client
-- React hooks
-- default install-ready UI
-- ringtone support
-- reconnect-aware connection state
-- WebRTC helpers
+- keep your current database stack
+- swap persistence without rewriting call logic
+- use durable storage for call history
+- use lightweight ephemeral storage for presence and connection tracking
 
 ## Who Installs What
 
-### Backend developer
+### Backend teams
 
 Install:
 
@@ -144,15 +111,15 @@ Install:
 npm install @streamyy/server
 ```
 
-What they get:
+Typical responsibilities:
 
-- runtime bootstrap
-- signaling handlers
-- call session management
-- presence tracking
-- HTTP helper routes
+- authenticate socket connections
+- create and manage call sessions
+- relay SDP and ICE signaling events
+- track online users and device connections
+- expose helper HTTP routes if needed
 
-### Frontend developer
+### Frontend teams
 
 Install:
 
@@ -160,21 +127,20 @@ Install:
 npm install @streamyy/client
 ```
 
-What they get:
+Typical exports:
 
-- `StreammyClient`
-- `StreammyProvider`
-- `useStreammy()`
-- `StreammyCallWidget`
+- `StreamyyClient`
+- `StreamyyProvider`
+- `useStreamyy()`
+- `StreamyyCallWidget`
 - `VideoStage`
-- ringtone configuration
+- `VideoTile`
+- ringtone configuration helpers
 - WebRTC helper utilities
 
-## Backend Usage
+## Backend Quick Start
 
-## 1. Create the runtime
-
-This is the main backend entry point.
+The server package handles signaling, lifecycle updates, and connection orchestration. A minimal Express setup looks like this:
 
 ```ts
 import { createServer } from "node:http";
@@ -220,19 +186,37 @@ registerExpressStreammyRoutes(app, {
 httpServer.listen(4000);
 ```
 
-What this does:
+What this runtime is doing:
 
-- creates the call service
-- creates the Socket.IO server internally
-- binds Socket.IO events internally
-- handles authentication
-- enables ringing timeout
-- exposes optional HTTP routes
-- uses in-memory storage by default unless you pass a persistence adapter
+- creating the call service
+- starting the Socket.IO transport internally
+- binding Streamyy signaling handlers
+- applying your auth callback during connection setup
+- enforcing a ringing timeout for unanswered calls
+- exposing optional HTTP routes for health checks and server-side call actions
 
-## 1a. Use MongoDB/Mongoose if you want persistent storage
+### Auth Shape
 
-If you want call history, presence persistence, and socket connection persistence across restarts, pass a Mongoose adapter.
+Your auth function should return enough identity information for Streamyy to map sockets to users and devices.
+
+Common fields:
+
+- `userId`
+- `deviceId`
+- optional `metadata`
+
+That allows the backend to support:
+
+- multi-device user rooms
+- presence updates
+- targeted incoming-call delivery
+- clean socket connection tracking
+
+## Persistent Storage Example
+
+If you want call records and presence state to survive restarts, pass a persistence adapter.
+
+### MongoDB / Mongoose
 
 ```ts
 import mongoose from "mongoose";
@@ -252,21 +236,15 @@ const streammy = createStreammyServer({
 });
 ```
 
-This means:
-
-- `@streamyy/server` is storage-agnostic
-- Mongoose is optional
-- you can later add other adapters like Prisma, PostgreSQL, Redis, or your own custom repositories
-
-Install for this option:
+Install:
 
 ```bash
 npm install @streamyy/server @streamyy/mongoose mongoose
 ```
 
-## 1b. Use your own persistence adapter
+### Custom Adapter
 
-If your app uses another database, implement the repository interfaces from `@streamyy/core` and pass them into the server runtime.
+If your team already uses another database, implement the repositories from `@streamyy/core` and inject them into the runtime.
 
 ```ts
 import {
@@ -328,53 +306,15 @@ const streammy = createStreammyServer({
 });
 ```
 
-What this gives you:
+This is useful when you want to keep Streamyy’s runtime behavior but plug it into your own data layer.
 
-- Streamyy server logic stays the same
-- only the storage adapter changes
-- backend teams can keep using their existing database stack
-
-## Example adapter ideas
-
-### Prisma / PostgreSQL
-
-Create:
-
-- `PrismaCallSessionRepository`
-- `PrismaUserPresenceRepository`
-- `PrismaSocketConnectionRepository`
-
-Then pass them as:
-
-```ts
-const persistence = defineStreammyPersistenceAdapter({
-  sessions: new PrismaCallSessionRepository(prisma),
-  presence: new PrismaUserPresenceRepository(prisma),
-  connections: new PrismaSocketConnectionRepository(prisma),
-});
-```
-
-### Redis
-
-For lightweight ephemeral calling state, you can also implement repositories backed by Redis.
-
-That can be useful when:
-
-- you care more about speed than long-term history
-- you want fast presence and socket tracking
-- you want short-lived call session state
-
-## Official adapter package examples
+## Official Adapter Examples
 
 ### Prisma
-
-Install:
 
 ```bash
 npm install @streamyy/server @streamyy/prisma
 ```
-
-Usage:
 
 ```ts
 import { createPrismaPersistenceAdapter } from "@streamyy/prisma";
@@ -393,13 +333,9 @@ const streammy = createStreammyServer({
 
 ### PostgreSQL
 
-Install:
-
 ```bash
 npm install @streamyy/server @streamyy/postgres pg
 ```
-
-Usage:
 
 ```ts
 import { Pool } from "pg";
@@ -414,13 +350,9 @@ const persistence = createPostgresPersistenceAdapter({
 
 ### Redis
 
-Install:
-
 ```bash
 npm install @streamyy/server @streamyy/redis redis
 ```
-
-Usage:
 
 ```ts
 import { createClient } from "redis";
@@ -436,13 +368,9 @@ const persistence = createRedisPersistenceAdapter({
 
 ### Supabase
 
-Install:
-
 ```bash
 npm install @streamyy/server @streamyy/supabase @supabase/supabase-js
 ```
-
-Usage:
 
 ```ts
 import { createClient } from "@supabase/supabase-js";
@@ -459,13 +387,9 @@ const persistence = createSupabasePersistenceAdapter({
 
 ### DynamoDB
 
-Install:
-
 ```bash
 npm install @streamyy/server @streamyy/dynamodb @aws-sdk/lib-dynamodb
 ```
-
-Usage:
 
 ```ts
 import { createDynamoDbPersistenceAdapter } from "@streamyy/dynamodb";
@@ -475,9 +399,9 @@ const persistence = createDynamoDbPersistenceAdapter({
 });
 ```
 
-## 2. Express integration
+## Framework Integrations
 
-If your backend uses Express:
+### Express
 
 ```ts
 import express from "express";
@@ -492,13 +416,41 @@ registerExpressStreammyRoutes(app, {
 });
 ```
 
-Routes:
+### Fastify
+
+```ts
+import Fastify from "fastify";
+import { registerFastifyStreammyRoutes } from "@streamyy/server";
+
+const app = Fastify();
+
+registerFastifyStreammyRoutes(app, {
+  service: streammy.service,
+  basePath: "/streammy",
+});
+```
+
+### Nest-Style Module Registration
+
+```ts
+import { StreammyModule } from "@streamyy/server";
+
+const streammyModule = StreammyModule.forRoot({
+  global: true,
+  service: streammy.service,
+  notifier: streammy.notifier,
+});
+```
+
+## HTTP Routes
+
+When registered, Streamyy can expose helper endpoints such as:
 
 - `GET /streammy/health`
 - `POST /streammy/calls`
 - `POST /streammy/calls/:callId/end`
 
-### Create a call over HTTP
+### Create a Call Over HTTP
 
 ```http
 POST /streammy/calls
@@ -514,7 +466,7 @@ Content-Type: application/json
 }
 ```
 
-### End a call over HTTP
+### End a Call Over HTTP
 
 ```http
 POST /streammy/calls/call_123/end
@@ -526,63 +478,16 @@ Content-Type: application/json
 }
 ```
 
-## 3. Fastify integration
+## Frontend Quick Start
 
-If your backend uses Fastify:
-
-```ts
-import Fastify from "fastify";
-import { registerFastifyStreammyRoutes } from "@streamyy/server";
-
-const app = Fastify();
-
-registerFastifyStreammyRoutes(app, {
-  service: streammy.service,
-  basePath: "/streammy",
-});
-```
-
-## 4. Nest-style integration
-
-If you want Nest-style module registration:
-
-```ts
-import { StreammyModule } from "@streamyy/server";
-
-const streammyModule = StreammyModule.forRoot({
-  global: true,
-  service: streammy.service,
-  notifier: streammy.notifier,
-});
-```
-
-## Backend behavior
-
-The backend package handles:
-
-- user connection registration
-- multi-device user rooms
-- incoming call notification
-- accept, decline, cancel, and end events
-- SDP and ICE relay
-- presence updates
-- missed call timeout after 60 seconds
-- internal Socket.IO setup, so backend users do not need to install or create Socket.IO manually
-- in-memory storage by default
-- custom persistence via adapter injection
-
-## Frontend Usage
-
-## 1. Use the default UI
-
-This is the easiest frontend integration path.
+The fastest way to ship a working calling UI is to use the provider plus the default widget.
 
 ```tsx
-import { StreammyCallWidget, StreammyProvider } from "@streamyy/client";
+import { StreamyyCallWidget, StreamyyProvider } from "@streamyy/client";
 
 export function CallingPage() {
   return (
-    <StreammyProvider
+    <StreamyyProvider
       options={{
         url: "http://localhost:4000",
         token: "jwt-token",
@@ -596,39 +501,35 @@ export function CallingPage() {
         reconnectionDelayMaxMs: 5000,
       }}
     >
-      <StreammyCallWidget
+      <StreamyyCallWidget
         defaultReceiverId="user_456"
         defaultCallType="video"
       />
-    </StreammyProvider>
+    </StreamyyProvider>
   );
 }
 ```
 
-What the default UI gives you:
+The default UI gives you:
 
-- start call form
-- current call state
-- incoming call accept/decline panel
-- mute and video toggles
-- end-call action
-- reconnect status
+- a start-call form
+- an incoming-call accept and decline surface
+- a ready-made in-call layout
+- local and remote media rendering
+- mute and camera controls
+- end-call controls
+- reconnect-aware UI state
 - built-in ringtone behavior
-- non-mirrored video by default
+- render overrides for incoming and active call screens
 
-## 2. Customize ringtones
+## Frontend Customization
 
-The frontend package supports different incoming and outgoing ringing sources.
+### Custom Ringtones
 
-You can provide:
-
-- a file URL
-- a generated tone pattern
-
-### Example using custom audio files
+You can use either hosted files or generated tone patterns.
 
 ```tsx
-<StreammyCallWidget
+<StreamyyCallWidget
   ringtones={{
     incoming: { kind: "url", src: "/sounds/incoming.mp3" },
     outgoing: { kind: "url", src: "/sounds/outgoing.mp3" },
@@ -636,10 +537,8 @@ You can provide:
 />
 ```
 
-### Example using generated tones
-
 ```tsx
-<StreammyCallWidget
+<StreamyyCallWidget
   ringtones={{
     incoming: {
       kind: "pattern",
@@ -662,14 +561,43 @@ You can provide:
 />
 ```
 
-## 3. Use the client directly
+### Override Incoming and Active Call Screens
 
-If the frontend team does not want the default UI, they can use the client and build their own interface.
+```tsx
+<StreamyyCallWidget
+  renderIncomingCall={({ call, accept, decline }) => (
+    <MyIncomingCallSheet
+      callerId={call.callerId}
+      type={call.callType}
+      onAccept={accept}
+      onDecline={decline}
+    />
+  )}
+  renderCallInterface={({ activeCall, media, toggleMute, toggleVideo, end }) => (
+    <MyCallScreen
+      call={activeCall}
+      localStream={media.localStream}
+      remoteStream={media.remoteStream}
+      muted={media.muted}
+      videoEnabled={media.videoEnabled}
+      onToggleMute={toggleMute}
+      onToggleVideo={toggleVideo}
+      onEnd={end}
+    />
+  )}
+/>
+```
+
+## Low-Level Frontend APIs
+
+If the widget is too opinionated, you can work directly with the client or the hook.
+
+### Client API
 
 ```ts
-import { createStreammyClient } from "@streamyy/client";
+import { createStreamyyClient } from "@streamyy/client";
 
-const client = createStreammyClient({
+const client = createStreamyyClient({
   url: "http://localhost:4000",
   token: "jwt-token",
   userId: "user_123",
@@ -696,12 +624,10 @@ client.initiateCall("user_456", "audio", {
 });
 ```
 
-## 4. Use the React hook
-
-If the frontend team wants a custom UI but still wants package-managed state:
+### React Hook
 
 ```tsx
-import { StreammyProvider, useStreammy } from "@streamyy/client";
+import { StreamyyProvider, useStreamyy } from "@streamyy/client";
 
 function CustomCallingUI() {
   const {
@@ -709,11 +635,15 @@ function CustomCallingUI() {
     reconnecting,
     activeCall,
     callStatus,
-    initiateCall,
+    media,
+    startAudioCall,
+    startVideoCall,
     acceptCall,
     declineCall,
     endCall,
-  } = useStreammy();
+    toggleMute,
+    toggleVideo,
+  } = useStreamyy();
 
   return (
     <div>
@@ -721,30 +651,34 @@ function CustomCallingUI() {
       <p>Reconnecting: {String(reconnecting)}</p>
       <p>Status: {callStatus}</p>
 
-      <button onClick={() => initiateCall("user_456", "video")}>
-        Start call
+      <button onClick={() => void startAudioCall("user_456")}>
+        Start audio call
+      </button>
+
+      <button onClick={() => void startVideoCall("user_456")}>
+        Start video call
       </button>
 
       {activeCall?.direction === "incoming" ? (
         <div>
-          <button onClick={() => acceptCall(activeCall.callId)}>Accept</button>
-          <button onClick={() => declineCall(activeCall.callId)}>Decline</button>
+          <button onClick={() => void acceptCall(activeCall.callId)}>Accept</button>
+          <button onClick={() => void declineCall(activeCall.callId)}>Decline</button>
         </div>
       ) : null}
 
       {activeCall ? (
-        <button onClick={() => endCall(activeCall.callId)}>End</button>
+        <>
+          <button onClick={() => toggleMute()}>{media.muted ? "Unmute" : "Mute"}</button>
+          <button onClick={() => toggleVideo()}>{media.videoEnabled ? "Stop video" : "Start video"}</button>
+          <button onClick={() => void endCall(activeCall.callId)}>End</button>
+        </>
       ) : null}
     </div>
   );
 }
 ```
 
-## 5. WebRTC helpers
-
-The frontend package also exports helper utilities.
-
-### Local media
+### WebRTC Helpers
 
 ```ts
 import { getUserMedia, toggleStreamTracks } from "@streamyy/client";
@@ -758,12 +692,10 @@ toggleStreamTracks(localStream, "audio", false);
 toggleStreamTracks(localStream, "video", true);
 ```
 
-### Peer connection session
-
 ```ts
-import { StreammyPeerSession } from "@streamyy/client";
+import { StreamyyPeerSession } from "@streamyy/client";
 
-const peer = new StreammyPeerSession({
+const peer = new StreamyyPeerSession({
   client,
   callId: "call_123",
   remoteUserId: "user_456",
@@ -775,15 +707,7 @@ const offer = await peer.createOffer();
 client.sendOffer("call_123", "user_456", offer);
 ```
 
-## 6. WhatsApp-style video swap layout
-
-If the frontend team wants the common calling layout where:
-
-- one video is shown in the main area
-- the other video is shown in a smaller corner preview
-- tapping the smaller preview swaps them
-
-they can use `VideoStage`.
+### Video Layout Helpers
 
 ```tsx
 import { VideoStage } from "@streamyy/client";
@@ -797,21 +721,14 @@ import { VideoStage } from "@streamyy/client";
 />
 ```
 
-Behavior:
+Expected behavior:
 
-- remote video is large by default
-- local video appears in the smaller corner tile
-- clicking the smaller tile swaps the focus
-- clicking again swaps back
+- remote video is the primary view by default
+- local video appears in a smaller preview tile
+- clicking the smaller tile swaps focus
 - local video is not mirrored unless you opt in
 
-### Video tile mirroring
-
-`VideoTile` is not mirrored by default.
-
-That means when a user moves left, the video also moves left on screen.
-
-If a frontend team wants selfie-style preview behavior, they can opt in:
+If you want selfie-style preview behavior:
 
 ```tsx
 import { VideoTile } from "@streamyy/client";
@@ -823,19 +740,7 @@ import { VideoTile } from "@streamyy/client";
 />
 ```
 
-## Frontend behavior
-
-The frontend package currently supports:
-
-- outgoing and incoming call states
-- reconnect-aware status
-- low-bandwidth client mode
-- different incoming and outgoing ringtones
-- custom ringtone sources
-- default call UI
-- custom UI through hooks and client access
-
-## Signaling Events
+## Signaling Contract
 
 Socket events used by the packages:
 
@@ -866,61 +771,85 @@ Statuses used by Streamyy:
 
 ## Typical Call Flow
 
-1. Caller initiates the call.
-2. Backend creates a call session.
-3. Receiver gets `call:incoming`.
-4. Receiver accepts or declines.
-5. Offer, answer, and ICE candidates are exchanged.
-6. Call becomes active.
-7. If nobody answers within 60 seconds, the call becomes `missed`.
-8. When either side ends the call, the backend stores `endedAt`, `duration`, and `endedBy`.
+1. The caller initiates a call.
+2. The backend creates a call session and emits an incoming-call event.
+3. The receiver accepts, declines, or ignores the call.
+4. If accepted, offer, answer, and ICE candidates are exchanged.
+5. The call moves into an active state.
+6. If the timeout expires before acceptance, the call is marked as missed.
+7. When either side ends the call, the session is updated with final metadata such as duration and ended-by information.
 
-## Workspace Commands
+## Backend Behavior Summary
 
-These are for working on the package source in this repository.
+The server package is responsible for:
 
-Install workspace dependencies:
+- user connection registration
+- multi-device user rooms
+- incoming call notification
+- accept, decline, cancel, and end transitions
+- SDP and ICE relay
+- presence updates
+- ringing timeout handling
+- adapter-based persistence
+
+## Frontend Behavior Summary
+
+The client package supports:
+
+- outgoing and incoming call states
+- reconnect-aware status handling
+- low-bandwidth client mode
+- ringtone customization
+- default UI and custom UI flows
+- direct client usage and hook-based state management
+
+## Developing This Docs Site
+
+This repo itself runs as a Vite React application.
+
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Build all packages:
+Start the local dev server:
+
+```bash
+npm run dev
+```
+
+Build for production:
 
 ```bash
 npm run build
 ```
 
-Build only backend package:
+Preview the production build locally:
 
 ```bash
-npm run build:server
+npm run preview
 ```
 
-Build only Mongoose adapter package:
+Run type-checking:
 
 ```bash
-npm run build:mongoose
+npm run lint
 ```
 
-Build the other adapter packages:
+## Project Structure
 
-```bash
-npm run build:prisma
-npm run build:postgres
-npm run build:redis
-npm run build:supabase
-npm run build:dynamodb
-```
+Important files in this repo:
 
-Build only frontend package:
+- [`README.md`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/README.md)
+- [`src/docs.ts`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/src/docs.ts)
+- [`src/App.tsx`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/src/App.tsx)
+- [`src/pages/DocPage.tsx`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/src/pages/DocPage.tsx)
+- [`src/components/Sidebar.tsx`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/src/components/Sidebar.tsx)
+- [`vercel.json`](c:/Users/USER/Desktop/programming/javascript/react/project/streamyy-docs/vercel.json)
 
-```bash
-npm run build:frontend
-```
+## Deployment Notes
 
-Build only core package:
+The project is configured for Vercel with SPA rewrites so nested documentation routes resolve back to `index.html`.
 
-```bash
-npm run build:core
-```
+That means routes like `/packages` or `/frontend-usage` can load correctly in production without requiring server-side rendered pages.
