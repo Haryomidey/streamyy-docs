@@ -31,10 +31,6 @@ This documentation site explains how Streamyy is split across backend and fronte
 - replacing WebRTC peer-to-peer media exchange
 
 Media still flows peer-to-peer through WebRTC.
-
-## About This Repo
-
-This repository is the documentation frontend for Streamyy. It is built with Vite, React, and TypeScript, and the documentation content is sourced from code-based markdown sections.
     `,
   },
   {
