@@ -68,6 +68,17 @@ Use it when you want:
 - WebRTC helper utilities
 - reusable video layout components
 
+### `@streamyy/cli`
+
+The CLI package developers use to scaffold Streamyy starters.
+
+Use it when you want:
+
+- a backend starter
+- a frontend starter
+- both starters from one command
+- a custom frontend starter based on `StreamyyProvider` and `useStreamyy()`
+
 ### Official Adapter Packages
 
 Streamyy supports first-party persistence adapters for:
@@ -102,6 +113,30 @@ This makes it easier to:
 - use lightweight ephemeral storage for presence and connection tracking
 
 ## Who Installs What
+
+### CLI Starter Scaffolding
+
+Use `@streamyy/cli` when you want to scaffold a starter app instead of wiring packages manually. The exposed binary is still `streamyy`, but npm usage should use `npx @streamyy/cli`.
+
+```bash
+npx @streamyy/cli init
+npx @streamyy/cli init --backend
+npx @streamyy/cli init --frontend
+npx @streamyy/cli init --frontend --custom
+```
+
+Scaffolding options:
+
+- no flags scaffolds both backend and frontend starters
+- `--backend` scaffolds only the backend starter
+- `--frontend` scaffolds only the frontend starter
+
+Generated starter directories:
+
+- `streamyy-backend` for the backend starter
+- `streamyy-frontend` for the frontend starter
+
+Use `--custom` with the frontend starter when you want it to scaffold `StreamyyProvider` and `useStreamyy()` instead of the default widget.
 
 ### Backend teams
 
